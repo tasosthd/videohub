@@ -1,14 +1,30 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Signup · VideoHub</title><link rel="stylesheet" href="assets/css/style.css"></head><body class="auth-page">
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#07080d">
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<link rel="stylesheet" href="assets/css/style.css">
+<title>Signup · VideoHub</title>
+</head>
+<body class="auth-page">
   <main class="auth-card">
     <a class="logo" href="index.html"><span class="logo-mark">V</span><span>VideoHub</span></a>
-    <h1>Create your channel.</h1><p>Launch a clean video profile with uploads, likes, saves, comments, and search.</p>
+    <p class="eyebrow">Launch your channel</p>
+    <h1>Create your video empire.</h1>
+    <p>Start with a clean creator profile and scale into uploads, saves, comments, and premium distribution.</p>
     <form id="signupForm" class="form-grid">
-      <label class="field"><span>Full name</span><input id="fullName" class="input" required maxlength="80"></label>
-      <label class="field"><span>Username</span><input id="username" class="input" required pattern="[a-zA-Z0-9_]{3,24}" placeholder="future_billionaire"></label>
+      <label class="field"><span>Full name</span><input id="fullName" class="input" required maxlength="80" autocomplete="name"></label>
+      <label class="field"><span>Username</span><input id="username" class="input" required minlength="3" maxlength="24" pattern="[a-zA-Z0-9_]+" placeholder="future_billionaire" autocomplete="username"></label>
       <label class="field"><span>Email</span><input id="email" class="input" type="email" autocomplete="email" required></label>
       <label class="field"><span>Password</span><input id="password" class="input" type="password" autocomplete="new-password" minlength="6" required></label>
-      <button class="btn btn-primary" type="submit">Create account</button>
+      <button class="btn btn-primary full" type="submit">Create account</button>
     </form>
     <p class="auth-switch">Already in? <a href="login.html">Log in</a></p>
   </main>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="assets/js/supabase.js"></script><script src="assets/js/auth.js"></script></body></html>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="assets/js/supabase.js"></script>
+<script src="assets/js/auth.js"></script>
+</body>
+</html>

@@ -1,6 +1,8 @@
 # VideoHub Premium Supabase Video App
 
-A deployable HTML/CSS/JavaScript video platform with Supabase Auth, Supabase Database, Supabase Storage, profiles, uploads, likes, saves, comments, search, and responsive premium UI.
+Static HTML/CSS/JavaScript video platform using Supabase Auth, Database, and Storage.
+
+This revision keeps the existing Supabase frontend configuration exactly where it belongs in `assets/js/supabase.js`. The anon public key is safe in frontend JavaScript only when Row Level Security is enabled. Never put a service role key in this project.
 
 ## Project structure
 
@@ -25,18 +27,20 @@ A deployable HTML/CSS/JavaScript video platform with Supabase Auth, Supabase Dat
 /README.md
 ```
 
-## 1. Create the Supabase project
+## What changed in this revision
 
-1. Go to Supabase.
-2. Create a new project.
-3. Open Project Settings > API.
-4. Copy:
-   - Project URL
-   - anon public key
+- Wrapped JavaScript files in isolated scopes to prevent browser-level `const`/function name collisions.
+- Improved Auth flow for email confirmation and persistent sessions.
+- Added safer profile creation using both client fallback logic and a Supabase Auth trigger in SQL.
+- Added a safe `increment_video_views` RPC so view counts work without broad update permissions.
+- Improved upload validation, progress messaging, and upload-limit placeholder UI for future Pro plans.
+- Improved profile editing, avatar upload, saved videos, profile stats, and modal behavior.
+- Improved video page likes, saves, comments, counts, related videos, and XSS-safe rendering.
+- Improved search by title, description, username, full name, and category.
+- Polished responsive UI across desktop, tablet, and phone screens.
+- Kept payment keys out of the project. Stripe or another provider can be added later.
 
-The anon key is safe in frontend JavaScript when Row Level Security is enabled. Never use the service_role key in frontend code.
-
-## 2. Add Supabase credentials
+## Supabase configuration
 
 Open:
 
@@ -44,161 +48,135 @@ Open:
 assets/js/supabase.js
 ```
 
-Replace:
+This file should keep your existing project URL and anon public key exactly as they are. Do not replace them with placeholders. Do not add a service role key to frontend code.
 
-```js
-const SUPABASE_URL = "PASTE_YOUR_SUPABASE_PROJECT_URL_HERE";
-const SUPABASE_ANON_KEY = "PASTE_YOUR_SUPABASE_ANON_KEY_HERE";
-```
+## Database setup
 
-with your real Project URL and anon public key.
+In Supabase SQL Editor:
 
-## 3. Run SQL schema
+1. Run `supabase/schema.sql`.
+2. Run `supabase/policies.sql`.
 
-In Supabase:
+The schema creates:
 
-1. Open SQL Editor.
-2. Paste the contents of `supabase/schema.sql`.
-3. Run it.
+- `profiles`
+- `videos`
+- `video_likes`
+- `video_saves`
+- `video_comments`
+- profile update trigger
+- auth user profile trigger
+- safe RPC for video view increments
 
-This creates:
+## Storage setup
 
-- profiles
-- videos
-- video_likes
-- video_saves
-- video_comments
+Create these public buckets:
 
-## 4. Enable RLS and policies
+- `videos`
+- `thumbnails`
+- `avatars`
 
-1. Open SQL Editor again.
-2. Paste the contents of `supabase/policies.sql`.
-3. Run it.
-
-This enables RLS and adds safe policies for profiles, videos, likes, saves, comments, and storage.
-
-## 5. Create storage buckets
-
-In Supabase:
-
-1. Go to Storage.
-2. Create these buckets:
-   - `videos`
-   - `thumbnails`
-   - `avatars`
-3. Set each bucket to public.
-
-The storage policies require files to be uploaded inside a folder named after the logged-in user's auth ID. The JavaScript already does this automatically.
-
-Example path:
+The JavaScript uploads files into this structure:
 
 ```txt
-USER_ID/random-file-id.mp4
+USER_AUTH_ID/random-file-id.ext
 ```
 
-This prevents users from overwriting other users' files.
+The storage policies only allow authenticated users to upload/update/delete files inside their own user-id folder. Public users can view files from the public buckets.
 
-## 6. Auth setup
+## Auth setup
 
-Supabase Auth is already used by:
+Supabase Auth is used by:
 
 - `signup.html`
 - `login.html`
 - protected pages using `requireAuth()`
 - logout buttons
-- session persistence
+- persistent sessions
 - auth state listener
 
-Optional setting:
+If email confirmation is enabled, users may need to confirm their email before logging in. The SQL trigger still creates the matching profile row when the Auth user is created.
 
-If email confirmation is enabled in Supabase, users may need to confirm their email before logging in. For easiest local testing, disable email confirmation in Authentication > Providers > Email.
+## Deploy to Vercel
 
-## 7. Deploy to Vercel
-
-1. Push the folder to GitHub.
+1. Push this folder to GitHub.
 2. Import the repository in Vercel.
 3. Framework preset: Other.
 4. Build command: leave empty.
 5. Output directory: leave empty or use root.
 6. Deploy.
 
-Because this is static HTML/CSS/JS, no server build step is needed.
+This is a static app, so no server build step is required.
 
-## 8. Test the app
+## Test checklist
 
 ### Signup
 
 1. Open `/signup.html`.
 2. Create an account.
-3. Confirm email if your Supabase Auth settings require it.
-4. Confirm a row appears in `profiles`.
+3. Confirm email if Supabase requires it.
+4. Check that a row exists in `profiles`.
 
 ### Login
 
 1. Open `/login.html`.
 2. Log in with email and password.
-3. You should be redirected to `/index.html`.
+3. Confirm redirect to `/index.html`.
+4. Refresh the page and confirm the session stays active.
 
 ### Upload
 
 1. Open `/upload.html`.
-2. Select a video file.
-3. Select a thumbnail image.
-4. Add title, description, and category.
-5. Submit.
-6. Confirm:
-   - file appears in `videos` bucket
-   - thumbnail appears in `thumbnails` bucket
-   - row appears in `videos` table
-   - redirect goes to `/video.html?id=VIDEO_ID`
+2. Select a video file and thumbnail image.
+3. Add title, description, and category.
+4. Publish.
+5. Confirm files appear in the correct Supabase Storage buckets.
+6. Confirm a row appears in `videos`.
+7. Confirm redirect to `/video.html?id=VIDEO_ID`.
 
-### Likes and saves
+### Video page
 
-1. Open a video page.
-2. Press Like.
-3. Confirm row appears in `video_likes`.
-4. Press Save.
-5. Confirm row appears in `video_saves`.
-6. Open Profile > Saved tab.
+1. Open any video page.
+2. Confirm the player loads.
+3. Confirm views increment.
+4. Like and unlike the video.
+5. Save and unsave the video.
+6. Post a comment.
+7. Confirm related videos load.
 
-### Comments
-
-1. Open a video page.
-2. Add a comment.
-3. Confirm row appears in `video_comments`.
-
-### Profile editing
+### Profile
 
 1. Open `/profile.html`.
-2. Click Edit profile.
-3. Update avatar, username, full name, or bio.
-4. Confirm profile row updates.
-5. Confirm avatar uploads to `avatars` bucket.
+2. Confirm avatar, username, full name, bio, upload count, and saved count load.
+3. Edit full name, username, bio, and avatar.
+4. Confirm changes save in `profiles`.
+5. Confirm avatar uploads into the `avatars` bucket.
+6. Test Uploads and Saved tabs.
 
 ### Search
 
 1. Open `/search.html`.
 2. Search by video title.
 3. Search by creator username.
-4. Filter by category.
+4. Search by full name.
+5. Filter by category.
 
-## Security notes
+### Logout
 
-- Frontend apps may use the Supabase anon public key.
-- The service_role key bypasses RLS and must never be exposed in frontend JavaScript.
-- RLS must stay enabled on all public tables.
-- Storage uploads are scoped to the authenticated user's folder.
-- Users can only mutate their own profiles, videos, likes, saves, comments, and storage files.
+1. Click Logout from the sidebar.
+2. Confirm redirect to `/login.html`.
+3. Try opening a protected page and confirm it redirects to login.
 
 ## Monetization path
 
-This foundation can scale into:
+This project is structured for future monetization:
 
+- upload limits by plan
 - creator subscriptions
-- paid uploads
-- gated premium videos
-- Stripe checkout for Pro accounts
-- sponsor slots
+- paid video gates
+- boosted uploads
+- sponsor placements
 - creator analytics
-- team channels
-- storage limits by plan
+- Stripe Checkout or Customer Portal integration
+
+No payment secret keys are included. Add payment logic later through a secure backend/serverless function, never directly in frontend JavaScript.

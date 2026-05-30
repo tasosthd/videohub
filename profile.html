@@ -1,6 +1,74 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Profile · VideoHub</title><link rel="stylesheet" href="assets/css/style.css"></head><body data-protected="true">
-<div class="app-shell"><aside class="sidebar"><div class="sidebar-inner"><a class="logo" href="index.html"><span class="logo-mark">V</span><span>VideoHub</span></a><nav class="nav"><a href="index.html">⌂ Home</a><a href="search.html">⌕ Search</a><a href="upload.html">＋ Upload</a><a class="active" href="profile.html">◎ Profile</a></nav><div class="side-card"><a class="profile-mini" data-profile-button href="profile.html"><img class="avatar" data-avatar alt=""><strong data-profile-name>Creator</strong></a><button class="btn btn-danger btn-small" data-action="logout">Logout</button></div></div></aside>
-<main class="main"><section class="card card-pad"><div class="profile-head"><img id="profileAvatar" class="avatar" alt=""><div><h1 id="profileName" style="margin:0;letter-spacing:-.05em">Creator</h1><p id="profileUsername" class="subtle"></p><p id="profileBio" class="subtle"></p><button id="editProfileBtn" class="btn btn-ghost btn-small">Edit profile</button></div></div></section><div class="tabs"><button class="tab active" data-tab="uploads">Uploads</button><button class="tab" data-tab="saved">Saved</button></div><section class="video-grid" id="profileVideos"></section></main></div>
-<div class="modal" id="editModal"><div class="modal-card"><div class="topbar"><h2 style="margin:0">Edit profile</h2><button id="closeModal" class="btn btn-ghost btn-small">Close</button></div><form id="editProfileForm" class="form-grid"><label class="field"><span>Avatar</span><input id="editAvatar" class="input" type="file" accept="image/*"></label><label class="field"><span>Full name</span><input id="editFullName" class="input" maxlength="80"></label><label class="field"><span>Username</span><input id="editUsername" class="input" maxlength="24"></label><label class="field"><span>Bio</span><textarea id="editBio" maxlength="220"></textarea></label><button class="btn btn-primary" type="submit">Save changes</button></form></div></div>
-<nav class="mobile-nav"><a href="index.html">Home</a><a href="search.html">Search</a><a href="upload.html">Upload</a><a class="active" href="profile.html">Profile</a></nav>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="assets/js/supabase.js"></script><script src="assets/js/auth.js"></script><script src="assets/js/app.js"></script><script src="assets/js/profile.js"></script></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#07080d">
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<link rel="stylesheet" href="assets/css/style.css">
+<title>Profile · VideoHub</title>
+</head>
+<body data-protected="true">
+<div class="app-shell">
+<aside class="sidebar">
+  <div class="sidebar-inner">
+    <a class="logo" href="index.html" aria-label="VideoHub home"><span class="logo-mark">V</span><span>VideoHub</span></a>
+    <nav class="nav" aria-label="Primary navigation">
+      <a class="" href="index.html"><span>⌂</span> Home</a>
+      <a class="" href="search.html"><span>⌕</span> Search</a>
+      <a class="" href="upload.html"><span>＋</span> Upload</a>
+      <a class="active" href="profile.html"><span>◎</span> Profile</a>
+    </nav>
+    <div class="side-card">
+      <a class="profile-mini" data-profile-button href="profile.html">
+        <img class="avatar" data-avatar alt="">
+        <span><strong data-profile-name>Creator</strong><small data-profile-subtitle>Channel dashboard</small></span>
+      </a>
+      <a class="btn btn-primary btn-small full" href="upload.html">Publish</a>
+      <button class="btn btn-danger btn-small full" data-action="logout">Logout</button>
+    </div>
+  </div>
+</aside>
+<main class="main">
+  <section class="card card-pad profile-card">
+    <div class="profile-head">
+      <img id="profileAvatar" class="avatar avatar-xl" alt="Profile avatar">
+      <div class="profile-copy">
+        <p class="eyebrow">Creator channel</p>
+        <h1 id="profileName">Creator</h1>
+        <p id="profileUsername" class="handle"></p>
+        <p id="profileBio" class="subtle"></p>
+        <div class="action-row"><button id="editProfileBtn" class="btn btn-primary btn-small">Edit profile</button><a class="btn btn-ghost btn-small" href="upload.html">Upload</a></div>
+      </div>
+      <div class="profile-stats"><div><strong id="uploadCount">0</strong><span>Uploads</span></div><div><strong id="savedCount">0</strong><span>Saved</span></div></div>
+    </div>
+  </section>
+  <div class="tabs" role="tablist"><button class="tab active" data-tab="uploads">Uploads</button><button class="tab" data-tab="saved">Saved</button></div>
+  <section class="video-grid" id="profileVideos" aria-live="polite"></section>
+</main>
+</div>
+<div class="modal" id="editModal" aria-hidden="true">
+  <div class="modal-card">
+    <div class="topbar compact"><h2>Edit profile</h2><button id="closeModal" class="btn btn-ghost btn-small">Close</button></div>
+    <form id="editProfileForm" class="form-grid">
+      <label class="field"><span>Avatar</span><input id="editAvatar" class="input" type="file" accept="image/*"></label>
+      <label class="field"><span>Full name</span><input id="editFullName" class="input" maxlength="80"></label>
+      <label class="field"><span>Username</span><input id="editUsername" class="input" minlength="3" maxlength="24" pattern="[a-zA-Z0-9_]+"></label>
+      <label class="field"><span>Bio</span><textarea id="editBio" maxlength="220"></textarea></label>
+      <button class="btn btn-primary full" type="submit">Save changes</button>
+    </form>
+  </div>
+</div>
+<nav class="mobile-nav" aria-label="Mobile navigation">
+  <a class="" href="index.html">Home</a>
+  <a class="" href="search.html">Search</a>
+  <a class="" href="upload.html">Upload</a>
+  <a class="active" href="profile.html">Profile</a>
+</nav>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="assets/js/supabase.js"></script>
+<script src="assets/js/auth.js"></script>
+<script src="assets/js/app.js"></script>
+<script src="assets/js/profile.js"></script>
+</body>
+</html>

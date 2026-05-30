@@ -1,6 +1,79 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>VideoHub</title><link rel="stylesheet" href="assets/css/style.css"></head><body data-protected="true">
-<div class="app-shell"><aside class="sidebar"><div class="sidebar-inner"><a class="logo" href="index.html"><span class="logo-mark">V</span><span>VideoHub</span></a><nav class="nav"><a class="active" href="index.html">⌂ Home</a><a href="search.html">⌕ Search</a><a href="upload.html">＋ Upload</a><a href="profile.html">◎ Profile</a></nav><div class="side-card"><a class="profile-mini" data-profile-button href="profile.html"><img class="avatar" data-avatar alt=""><strong data-profile-name>Creator</strong></a><button class="btn btn-danger btn-small" data-action="logout">Logout</button></div></div></aside>
-<main class="main"><div class="topbar"><div><h1>Creator feed</h1><p class="subtle">Compact, fast, and built for serious publishing.</p></div><a class="btn btn-primary" href="upload.html">Upload video</a></div>
-<section class="feed-layout"><div class="grid"><div class="card hero-card"><h2>Upload value. Build audience. Monetize attention.</h2><p class="subtle">A Supabase-powered video platform foundation with profiles, likes, saves, comments, and search.</p><div class="action-row"><a class="btn btn-primary" href="upload.html">Publish now</a><a class="btn btn-ghost" href="search.html">Explore</a></div></div><div class="chips" id="categoryChips"></div><div class="video-grid" id="videoGrid"></div></div><aside class="grid"><div class="card card-pad"><h3>Total videos</h3><h2 id="countVideos">0</h2><p class="subtle">Content inventory drives growth.</p></div><div class="card card-pad"><h3>Creators</h3><h2 id="countCreators">0</h2><p class="subtle">Every profile can become a channel.</p></div></aside></section></main></div>
-<nav class="mobile-nav"><a class="active" href="index.html">Home</a><a href="search.html">Search</a><a href="upload.html">Upload</a><a href="profile.html">Profile</a></nav>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="assets/js/supabase.js"></script><script src="assets/js/auth.js"></script><script src="assets/js/app.js"></script></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#07080d">
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<link rel="stylesheet" href="assets/css/style.css">
+<title>VideoHub · Creator Feed</title>
+</head>
+<body data-protected="true">
+<div class="app-shell">
+<aside class="sidebar">
+  <div class="sidebar-inner">
+    <a class="logo" href="index.html" aria-label="VideoHub home"><span class="logo-mark">V</span><span>VideoHub</span></a>
+    <nav class="nav" aria-label="Primary navigation">
+      <a class="active" href="index.html"><span>⌂</span> Home</a>
+      <a class="" href="search.html"><span>⌕</span> Search</a>
+      <a class="" href="upload.html"><span>＋</span> Upload</a>
+      <a class="" href="profile.html"><span>◎</span> Profile</a>
+    </nav>
+    <div class="side-card">
+      <a class="profile-mini" data-profile-button href="profile.html">
+        <img class="avatar" data-avatar alt="">
+        <span><strong data-profile-name>Creator</strong><small data-profile-subtitle>Channel dashboard</small></span>
+      </a>
+      <a class="btn btn-primary btn-small full" href="upload.html">Publish</a>
+      <button class="btn btn-danger btn-small full" data-action="logout">Logout</button>
+    </div>
+  </div>
+</aside>
+<main class="main">
+  <header class="topbar">
+    <div>
+      <p class="eyebrow">Creator operating system</p>
+      <h1>Creator feed</h1>
+      <p class="subtle">Compact discovery, fast publishing, and monetization-ready content infrastructure.</p>
+    </div>
+    <div class="action-row"><a class="btn btn-ghost" href="search.html">Explore</a><a class="btn btn-primary" href="upload.html">Upload video</a></div>
+  </header>
+  <section class="feed-layout">
+    <div class="grid">
+      <article class="card hero-card">
+        <div class="hero-copy">
+          <span class="pill">Monetization-ready foundation</span>
+          <h2>Upload value. Build attention. Convert viewers.</h2>
+          <p class="subtle">Profiles, uploads, saves, likes, comments, search, and secure Supabase storage in one lean video platform.</p>
+          <div class="action-row"><a class="btn btn-primary" href="upload.html">Publish now</a><a class="btn btn-ghost" href="profile.html">Edit channel</a></div>
+        </div>
+        <div class="mini-panel">
+          <strong>Pro path</strong>
+          <span>Creator subscriptions</span>
+          <span>Premium video gates</span>
+          <span>Upload limits by plan</span>
+        </div>
+      </article>
+      <div class="section-head"><h2>Latest videos</h2><div class="chips" id="categoryChips" aria-label="Category filters"></div></div>
+      <div class="video-grid" id="videoGrid" aria-live="polite"></div>
+    </div>
+    <aside class="grid sticky-panel">
+      <div class="card stat-card"><span>Total videos</span><strong id="countVideos">0</strong><p>Content inventory drives growth.</p></div>
+      <div class="card stat-card"><span>Creators</span><strong id="countCreators">0</strong><p>Every profile can become a channel.</p></div>
+      <div class="card card-pad pro-card"><span class="pill">Upgrade-ready</span><h3>VideoHub Pro</h3><p class="subtle">Payment keys are intentionally not included. Add Stripe later for paid uploads, analytics, and premium video gates.</p><a class="btn btn-ghost full" href="upload.html">Prepare content</a></div>
+    </aside>
+  </section>
+</main>
+</div>
+<nav class="mobile-nav" aria-label="Mobile navigation">
+  <a class="active" href="index.html">Home</a>
+  <a class="" href="search.html">Search</a>
+  <a class="" href="upload.html">Upload</a>
+  <a class="" href="profile.html">Profile</a>
+</nav>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="assets/js/supabase.js"></script>
+<script src="assets/js/auth.js"></script>
+<script src="assets/js/app.js"></script>
+</body>
+</html>

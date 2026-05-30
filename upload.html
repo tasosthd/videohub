@@ -1,6 +1,67 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Upload · VideoHub</title><link rel="stylesheet" href="assets/css/style.css"></head><body data-protected="true">
-<div class="app-shell"><aside class="sidebar"><div class="sidebar-inner"><a class="logo" href="index.html"><span class="logo-mark">V</span><span>VideoHub</span></a><nav class="nav"><a href="index.html">⌂ Home</a><a href="search.html">⌕ Search</a><a class="active" href="upload.html">＋ Upload</a><a href="profile.html">◎ Profile</a></nav><div class="side-card"><a class="profile-mini" data-profile-button href="profile.html"><img class="avatar" data-avatar alt=""><strong data-profile-name>Creator</strong></a><button class="btn btn-danger btn-small" data-action="logout">Logout</button></div></div></aside>
-<main class="main"><div class="topbar"><div><h1>Upload video</h1><p class="subtle">Package your content like a premium asset.</p></div></div>
-<section class="grid-2"><form id="uploadForm" class="card card-pad form-grid"><label class="field upload-zone"><span>Video file</span><input id="videoFile" class="input" type="file" accept="video/*" required></label><label class="field upload-zone"><span>Thumbnail image</span><input id="thumbnailFile" class="input" type="file" accept="image/*" required></label><label class="field"><span>Title</span><input id="title" class="input" maxlength="120" required></label><label class="field"><span>Description</span><textarea id="description"></textarea></label><label class="field"><span>Category</span><select id="category"><option>Business</option><option>Gaming</option><option>Education</option><option>Lifestyle</option><option>Tech</option><option>Sports</option><option>Music</option></select></label><div class="progress" id="uploadProgress"><span></span></div><p class="subtle">Progress: <strong id="uploadProgressText">0%</strong></p><button class="btn btn-primary" type="submit">Publish video</button></form><aside class="card card-pad"><h2>Upload checklist</h2><p class="subtle">Use clear titles, high-contrast thumbnails, strong categories, and descriptions that make the viewer click.</p><div class="grid"><div class="empty">Videos go to the <strong>videos</strong> bucket.</div><div class="empty">Thumbnails go to the <strong>thumbnails</strong> bucket.</div><div class="empty">Metadata goes into the <strong>videos</strong> table.</div></div></aside></section></main></div>
-<nav class="mobile-nav"><a href="index.html">Home</a><a href="search.html">Search</a><a class="active" href="upload.html">Upload</a><a href="profile.html">Profile</a></nav>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="assets/js/supabase.js"></script><script src="assets/js/auth.js"></script><script src="assets/js/upload.js"></script></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#07080d">
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<link rel="stylesheet" href="assets/css/style.css">
+<title>Upload · VideoHub</title>
+</head>
+<body data-protected="true">
+<div class="app-shell">
+<aside class="sidebar">
+  <div class="sidebar-inner">
+    <a class="logo" href="index.html" aria-label="VideoHub home"><span class="logo-mark">V</span><span>VideoHub</span></a>
+    <nav class="nav" aria-label="Primary navigation">
+      <a class="" href="index.html"><span>⌂</span> Home</a>
+      <a class="" href="search.html"><span>⌕</span> Search</a>
+      <a class="active" href="upload.html"><span>＋</span> Upload</a>
+      <a class="" href="profile.html"><span>◎</span> Profile</a>
+    </nav>
+    <div class="side-card">
+      <a class="profile-mini" data-profile-button href="profile.html">
+        <img class="avatar" data-avatar alt="">
+        <span><strong data-profile-name>Creator</strong><small data-profile-subtitle>Channel dashboard</small></span>
+      </a>
+      <a class="btn btn-primary btn-small full" href="upload.html">Publish</a>
+      <button class="btn btn-danger btn-small full" data-action="logout">Logout</button>
+    </div>
+  </div>
+</aside>
+<main class="main">
+  <header class="topbar">
+    <div><p class="eyebrow">Creator studio</p><h1>Upload video</h1><p class="subtle">Package your content like a premium asset.</p></div>
+    <a class="btn btn-ghost" href="profile.html">View channel</a>
+  </header>
+  <section class="grid-2">
+    <form id="uploadForm" class="card card-pad form-grid">
+      <div id="uploadLimitBox" class="limit-box">Checking upload allowance...</div>
+      <label class="field upload-zone"><span>Video file</span><input id="videoFile" class="input" type="file" accept="video/*" required><small class="subtle">Recommended: MP4/WebM under 250MB for fast static hosting tests.</small></label>
+      <label class="field upload-zone"><span>Thumbnail image</span><input id="thumbnailFile" class="input" type="file" accept="image/*" required><small class="subtle">16:9 thumbnails look best in the feed.</small></label>
+      <label class="field"><span>Title</span><input id="title" class="input" maxlength="120" required placeholder="A sharp title that gets clicks"></label>
+      <label class="field"><span>Description</span><textarea id="description" maxlength="1600" placeholder="Explain the value, context, and why viewers should care."></textarea></label>
+      <label class="field"><span>Category</span><select id="category"><option>Business</option><option>Gaming</option><option>Education</option><option>Lifestyle</option><option>Tech</option><option>Sports</option><option>Music</option></select></label>
+      <div class="progress" id="uploadProgress"><span></span></div>
+      <p class="subtle">Progress: <strong id="uploadProgressText">0%</strong></p>
+      <button id="publishBtn" class="btn btn-primary full" type="submit">Publish video</button>
+    </form>
+    <aside class="grid">
+      <div class="card card-pad pro-card"><span class="pill">Pro structure ready</span><h2>Monetize later without rebuilding.</h2><p class="subtle">This page is ready for upload limits, paid storage tiers, boosted publishing, and creator analytics.</p></div>
+      <div class="card card-pad"><h2>Upload checklist</h2><div class="check-list"><span>Clear title</span><span>High-contrast thumbnail</span><span>Specific category</span><span>Useful description</span><span>Original creator asset</span></div></div>
+    </aside>
+  </section>
+</main>
+</div>
+<nav class="mobile-nav" aria-label="Mobile navigation">
+  <a class="" href="index.html">Home</a>
+  <a class="" href="search.html">Search</a>
+  <a class="active" href="upload.html">Upload</a>
+  <a class="" href="profile.html">Profile</a>
+</nav>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="assets/js/supabase.js"></script>
+<script src="assets/js/auth.js"></script>
+<script src="assets/js/upload.js"></script>
+</body>
+</html>

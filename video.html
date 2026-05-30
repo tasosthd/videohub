@@ -1,5 +1,52 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Video · VideoHub</title><link rel="stylesheet" href="assets/css/style.css"></head><body data-protected="true">
-<div class="app-shell"><aside class="sidebar"><div class="sidebar-inner"><a class="logo" href="index.html"><span class="logo-mark">V</span><span>VideoHub</span></a><nav class="nav"><a href="index.html">⌂ Home</a><a href="search.html">⌕ Search</a><a href="upload.html">＋ Upload</a><a href="profile.html">◎ Profile</a></nav><div class="side-card"><a class="profile-mini" data-profile-button href="profile.html"><img class="avatar" data-avatar alt=""><strong data-profile-name>Creator</strong></a><button class="btn btn-danger btn-small" data-action="logout">Logout</button></div></div></aside>
-<main class="main"><div class="grid"><section id="videoDetail"><div class="skeleton"></div></section><section class="grid-2"><div class="card card-pad"><h2>Comments</h2><form id="commentForm" class="search-row"><input id="commentText" class="input" placeholder="Add a smart comment..." maxlength="500"><button class="btn btn-primary" type="submit">Post</button></form><div id="commentsList" class="grid" style="margin-top:14px"></div></div><div class="card card-pad"><h2>Related videos</h2><div class="grid" id="relatedVideos"><div class="skeleton"></div></div></div></section></div></main></div>
-<nav class="mobile-nav"><a href="index.html">Home</a><a href="search.html">Search</a><a href="upload.html">Upload</a><a href="profile.html">Profile</a></nav>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="assets/js/supabase.js"></script><script src="assets/js/auth.js"></script><script src="assets/js/app.js"></script><script src="assets/js/video.js"></script></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#07080d">
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<link rel="stylesheet" href="assets/css/style.css">
+<title>Video · VideoHub</title>
+</head>
+<body data-protected="true">
+<div class="app-shell">
+<aside class="sidebar">
+  <div class="sidebar-inner">
+    <a class="logo" href="index.html" aria-label="VideoHub home"><span class="logo-mark">V</span><span>VideoHub</span></a>
+    <nav class="nav" aria-label="Primary navigation">
+      <a class="active" href="index.html"><span>⌂</span> Home</a>
+      <a class="" href="search.html"><span>⌕</span> Search</a>
+      <a class="" href="upload.html"><span>＋</span> Upload</a>
+      <a class="" href="profile.html"><span>◎</span> Profile</a>
+    </nav>
+    <div class="side-card">
+      <a class="profile-mini" data-profile-button href="profile.html">
+        <img class="avatar" data-avatar alt="">
+        <span><strong data-profile-name>Creator</strong><small data-profile-subtitle>Channel dashboard</small></span>
+      </a>
+      <a class="btn btn-primary btn-small full" href="upload.html">Publish</a>
+      <button class="btn btn-danger btn-small full" data-action="logout">Logout</button>
+    </div>
+  </div>
+</aside>
+<main class="main">
+  <div id="videoDetail"><div class="skeleton tall"></div></div>
+  <section class="grid-2 lower-grid">
+    <div class="card card-pad"><div class="section-head"><h2>Comments</h2><span class="subtle small" id="commentCount"></span></div><form id="commentForm" class="comment-form"><textarea id="commentText" placeholder="Add a smart comment..." maxlength="600"></textarea><button class="btn btn-primary" type="submit">Comment</button></form><div id="commentsList" class="comments-list"><div class="skeleton"></div></div></div>
+    <aside class="card card-pad"><div class="section-head"><h2>Related videos</h2></div><div class="video-grid single" id="relatedVideos"><div class="skeleton"></div></div></aside>
+  </section>
+</main>
+</div>
+<nav class="mobile-nav" aria-label="Mobile navigation">
+  <a class="active" href="index.html">Home</a>
+  <a class="" href="search.html">Search</a>
+  <a class="" href="upload.html">Upload</a>
+  <a class="" href="profile.html">Profile</a>
+</nav>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="assets/js/supabase.js"></script>
+<script src="assets/js/auth.js"></script>
+<script src="assets/js/app.js"></script>
+<script src="assets/js/video.js"></script>
+</body>
+</html>
