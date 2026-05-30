@@ -70,11 +70,13 @@ The schema creates:
 
 ## Storage setup
 
-Create these public buckets:
+Run `supabase/policies.sql` after `supabase/schema.sql`. The policies file now creates or updates these exact public buckets automatically:
 
 - `videos`
 - `thumbnails`
 - `avatars`
+
+Bucket names are case-sensitive. If you create them manually instead, use the exact lowercase names above. The app uses `supabase.storage.from("videos")`, `supabase.storage.from("thumbnails")`, and `supabase.storage.from("avatars")`.
 
 The JavaScript uploads files into this structure:
 
@@ -181,6 +183,16 @@ This project is structured for future monetization:
 
 No payment secret keys are included. Add payment logic later through a secure backend/serverless function, never directly in frontend JavaScript.
 
+
+## Hotfix: Bucket not found
+
+If upload shows `Bucket not found`, run `supabase/policies.sql` again or create these public Storage buckets manually in Supabase Dashboard → Storage:
+
+- `videos`
+- `thumbnails`
+- `avatars`
+
+The frontend now gives clearer errors and keeps the correct pattern: the bucket name goes inside `.from("bucket_name")`; the upload path stays as `USER_AUTH_ID/random-file-id.ext`.
 
 ## Hotfix: Supabase config toast
 

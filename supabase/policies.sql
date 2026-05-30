@@ -50,7 +50,19 @@ create policy "users insert own comments" on public.video_comments for insert wi
 create policy "users update own comments" on public.video_comments for update using (auth.uid() = user_id) with check (auth.uid() = user_id);
 create policy "users delete own comments" on public.video_comments for delete using (auth.uid() = user_id);
 
--- Storage bucket setup. Create public buckets named: videos, thumbnails, avatars.
+-- Storage bucket setup.
+-- This creates the exact public buckets the frontend uses. Bucket names are case-sensitive.
+-- If the buckets already exist, this keeps them and updates them to public.
+insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
+values
+  ('videos', 'videos', true, 262144000, array['video/mp4', 'video/webm', 'video/quicktime', 'video/x-matroska']),
+  ('thumbnails', 'thumbnails', true, 10485760, array['image/jpeg', 'image/png', 'image/webp', 'image/gif']),
+  ('avatars', 'avatars', true, 5242880, array['image/jpeg', 'image/png', 'image/webp', 'image/gif'])
+on conflict (id) do update set
+  public = excluded.public,
+  file_size_limit = excluded.file_size_limit,
+  allowed_mime_types = excluded.allowed_mime_types;
+
 -- These policies allow public reads and authenticated writes only inside the user's own auth-id folder.
 drop policy if exists "public read videos" on storage.objects;
 drop policy if exists "public read thumbnails" on storage.objects;

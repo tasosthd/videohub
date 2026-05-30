@@ -4,6 +4,13 @@
   const FREE_UPLOAD_LIMIT = 10;
   const MAX_VIDEO_MB = 250;
 
+  // Exact Supabase Storage bucket names. These must exist in Supabase Storage.
+  // Bucket names are case-sensitive: videos, thumbnails, avatars.
+  const STORAGE_BUCKETS = Object.freeze({
+    videos: "videos",
+    thumbnails: "thumbnails"
+  });
+
   function ext(name = "") { return name.split(".").pop()?.toLowerCase().replace(/[^a-z0-9]/g, "") || "bin"; }
   function setProgress(value) {
     const safe = Math.max(0, Math.min(100, Math.round(value)));
@@ -12,11 +19,28 @@
     if (bar) bar.style.width = `${safe}%`;
     if (label) label.textContent = `${safe}%`;
   }
+  function explainStorageError(error, bucket) {
+    const message = error?.message || "Storage upload failed.";
+    if (/bucket not found/i.test(message)) {
+      return new Error(`Bucket not found: create a public Supabase Storage bucket named "${bucket}" exactly.`);
+    }
+    if (/row-level security|policy|permission|not authorized|unauthorized/i.test(message)) {
+      return new Error(`Storage policy blocked the upload to "${bucket}". Run supabase/policies.sql and make sure the file path starts with your user id.`);
+    }
+    return error;
+  }
+
   async function uploadPublicFile(bucket, userId, file) {
     const path = `${userId}/${crypto.randomUUID()}.${ext(file.name)}`;
-    const { error } = await db.storage.from(bucket).upload(path, file, { upsert: false, cacheControl: "3600" });
-    if (error) throw error;
-    return db.storage.from(bucket).getPublicUrl(path).data.publicUrl;
+
+    // Correct Supabase Storage pattern:
+    // .from("bucket_name") selects the bucket.
+    // .upload("user-id/file.ext", file) uploads inside that bucket.
+    const bucketRef = db.storage.from(bucket);
+    const { error } = await bucketRef.upload(path, file, { upsert: false, cacheControl: "3600" });
+    if (error) throw explainStorageError(error, bucket);
+
+    return bucketRef.getPublicUrl(path).data.publicUrl;
   }
   async function updateLimitBox(userId) {
     const box = $("#uploadLimitBox");
@@ -57,10 +81,10 @@
       submit.textContent = "Uploading video...";
       try {
         setProgress(8);
-        const videoUrl = await uploadPublicFile("videos", session.user.id, videoFile);
+        const videoUrl = await uploadPublicFile(STORAGE_BUCKETS.videos, session.user.id, videoFile);
         setProgress(56);
         submit.textContent = "Uploading thumbnail...";
-        const thumbnailUrl = await uploadPublicFile("thumbnails", session.user.id, thumbFile);
+        const thumbnailUrl = await uploadPublicFile(STORAGE_BUCKETS.thumbnails, session.user.id, thumbFile);
         setProgress(82);
         submit.textContent = "Saving metadata...";
         const { data, error } = await db.from("videos").insert({

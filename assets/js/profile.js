@@ -6,6 +6,21 @@
   let session;
   let activeTab = "uploads";
 
+  // Exact Supabase Storage bucket name. This must exist in Supabase Storage.
+  // Bucket names are case-sensitive: avatars.
+  const AVATAR_BUCKET = "avatars";
+
+  function explainStorageError(error, bucket) {
+    const message = error?.message || "Storage upload failed.";
+    if (/bucket not found/i.test(message)) {
+      return new Error(`Bucket not found: create a public Supabase Storage bucket named "${bucket}" exactly.`);
+    }
+    if (/row-level security|policy|permission|not authorized|unauthorized/i.test(message)) {
+      return new Error(`Storage policy blocked the upload to "${bucket}". Run supabase/policies.sql and make sure the file path starts with your user id.`);
+    }
+    return error;
+  }
+
   function renderProfile() {
     $("#profileAvatar").src = ui.avatarUrl(profile);
     $("#profileName").textContent = profile.full_name || profile.username || "Creator";
@@ -59,9 +74,10 @@
         if (file) {
           if (!file.type.startsWith("image/")) throw new Error("Avatar must be an image file.");
           const path = `${session.user.id}/${crypto.randomUUID()}.${file.name.split(".").pop()?.toLowerCase() || "jpg"}`;
-          const { error: uploadError } = await db.storage.from("avatars").upload(path, file, { upsert: false, cacheControl: "3600" });
-          if (uploadError) throw uploadError;
-          avatar_url = db.storage.from("avatars").getPublicUrl(path).data.publicUrl;
+          const bucketRef = db.storage.from(AVATAR_BUCKET);
+          const { error: uploadError } = await bucketRef.upload(path, file, { upsert: false, cacheControl: "3600" });
+          if (uploadError) throw explainStorageError(uploadError, AVATAR_BUCKET);
+          avatar_url = bucketRef.getPublicUrl(path).data.publicUrl;
         }
         const username = cleanUsername($("#editUsername").value);
         if (username.length < 3) throw new Error("Username must be at least 3 characters.");
