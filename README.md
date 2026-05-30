@@ -180,3 +180,10 @@ This project is structured for future monetization:
 - Stripe Checkout or Customer Portal integration
 
 No payment secret keys are included. Add payment logic later through a secure backend/serverless function, never directly in frontend JavaScript.
+
+
+## Hotfix: Supabase config toast
+
+If you see `Supabase configuration is missing or invalid in assets/js/supabase.js`, the app is usually loading an old cached `supabase.js` file or the Supabase CDN did not load before the config file. This build adds cache-busting query strings to the local scripts and performs a stricter runtime check without replacing your Supabase URL or anon key.
+
+Your `assets/js/supabase.js` should keep the real project URL and anon key. Never place a `service_role` key in this frontend file.

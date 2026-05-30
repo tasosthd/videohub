@@ -1,5 +1,6 @@
 (() => {
-  const sb = window.videoHub?.supabase;
+  let sb = window.videoHub?.supabase;
+  function refreshClient() { sb = window.videoHub?.supabase; return sb; }
 
   function $(selector, parent = document) { return parent.querySelector(selector); }
   function $$(selector, parent = document) { return [...parent.querySelectorAll(selector)]; }
@@ -20,6 +21,7 @@
   }
 
   function requireConfig() {
+    refreshClient();
     if (!window.videoHub?.configReady || !sb) {
       toast("Supabase configuration is missing or invalid in assets/js/supabase.js", "error");
       return false;
@@ -101,6 +103,8 @@
   }
 
   async function signOut() {
+    refreshClient();
+    if (!sb) return window.location.href = "login.html";
     await sb.auth.signOut();
     window.location.href = "login.html";
   }
